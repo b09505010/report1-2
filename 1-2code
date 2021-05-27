@@ -1,0 +1,80 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#define student_num 100
+#define pre 10
+#define SWAP(a, b, size)                                                      \
+  do                                                                              \
+    {                                                                              \
+      size_t __size = (size);                                                      \
+      char *__a = (a), *__b = (b);                                              \
+      do                                                                      \
+        {                                                                      \
+          char __tmp = *__a;                                                      \
+          *__a++ = *__b;                                                      \
+          *__b++ = __tmp;                                                      \
+        } while (--__size > 0);                                                      \
+    } while (0)
+
+
+
+
+void bsort (void *const pbase, size_t total_elems, size_t size,__compar_fn_t cmp)
+{
+  int i = 0;
+	int j = 0;
+	for (i = 0; i < total_elems - 1; i++){
+		for (j = 0; j < total_elems - i - 1; j++){
+			if (cmp((char *)pbase + j*size, (char *)pbase + (j + 1)*size)>0){
+				SWAP((char *)pbase+j*size,(char *)pbase+(j+1)*size,size);
+			}
+		}
+	}
+}
+
+
+struct name{
+        char name[10];
+    };
+struct student_data{
+        struct name first_name;
+        struct name second_name;
+        int score;
+    };
+int cmpfunc (const void * a, const void * b)
+    {
+        struct student_data *x=(struct student_data*)a;
+        struct student_data *y=(struct student_data*)b;
+        return ( (x->score)-(y->score));
+    }
+
+int main(void){
+
+    struct name fdata[10]={"a","b","c","d","e","f","g","h","i","j"};
+    struct name sdata[10]={"1","2","3","4","5","6","7","8","9","10"}; 
+    struct student_data student[student_num];
+    srand(time(NULL));
+        for(int i=0;i<student_num;i++){
+            student[i].first_name=fdata[(rand()%10)];
+            student[i].second_name=sdata[(rand()%10)];
+            student[i].score=(rand()%100)+1;
+        }
+        printf("-----grdae before sorting-----\n");
+        for(int i=0;i<student_num;i++){
+            printf("%s ",student[i].second_name.name);
+            printf("%s:",student[i].first_name.name);
+            printf("%d\n",student[i].score);
+        }
+        printf("------------------------------\n");
+        printf("-----grdae after sorting------\n");
+        qsort(student,pre,sizeof(struct student_data),cmpfunc);
+        bsort(student,student_num,sizeof(struct student_data),cmpfunc);
+
+        for(int i=0;i<student_num;i++){
+            printf("%s ",student[i].second_name.name);
+            printf("%s:",student[i].first_name.name);
+            printf("%d\n",student[i].score);
+        }
+
+        printf("------------------------------\n");
+}
